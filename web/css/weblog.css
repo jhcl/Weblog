@@ -15,6 +15,10 @@ h1 {
     font-size: 200%;
 }
 
+textarea {
+    vertical-align: middle;
+}
+
 #time {
     font-size: 50%;
 }
@@ -27,6 +31,6 @@ h1 {
     margin-left: 50px;
 }
 
-#comments {
+div[id^=comment] {
     margin-left: 100px;
 }

@@ -83,39 +83,31 @@ public class ControllerServlet extends HttpServlet {
             view.forward(request, response);
 
         } else if (userPath.equals("/Commentjs")) {
-            System.out.println(request.getParameter("comm"));
             String pid = request.getParameter("postid");
-            System.out.println();
-            Posting pos = null;
             StringBuilder sb = new StringBuilder();
             for (Posting p : ws.getPostings()) {
 
                 if (p.getId() == Long.parseLong(pid)) {
-                    pos = p;
                     List<Comment> comm = p.getComments();
-                    comm.add(new Comment(1L, request.getParameter("comm")));
+                    Comment c = new Comment(1L, request.getParameter("comm"));
+                    comm.add(c);
                     p.setComments(comm);
-                }
-            }
-
-            if (pos != null) {
-                sb.append("<postid>");
-                sb.append("<pid>").append(pid).append("</pid>");
-                for (Comment c : pos.getComments()) {
+                    sb.append("<postid>");
+                    sb.append("<pid>").append(pid).append("</pid>");
                     sb.append("<comment>");
                     sb.append("<date>").append(c.getDate()).append("</date>");
                     sb.append("<text>").append(c.getContent()).append("</text>");
                     sb.append("</comment>");
+                    sb.append("</postid>");
                 }
-                sb.append("/postid");
             }
+
             response.setContentType("text/xml;charset=UTF-8");
             try (PrintWriter out = response.getWriter()) {
                 out.println(sb.toString());
                 out.close();
             }
         } else {
-            System.out.println("else");
             RequestDispatcher view = request.getRequestDispatcher("index.jsp");
             view.forward(request, response);
         }

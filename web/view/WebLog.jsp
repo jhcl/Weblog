@@ -32,26 +32,25 @@
             }
 
             function parseResponse(responseXML) {
-                var comments = responseXML.getElementsByTagName("postid")[0];
+                var pid = responseXML.getElementsByTagName("pid")[0].childNodes[0].nodeValue;
+                var comments = responseXML.getElementsByTagName("comment");
+                console.log(comments.length);
+                for (loop = 0; loop < comments.length; loop++) {
 
-                for (loop = 0; loop < comments.childNodes.length; loop++) {
-
-                    var comment = comments.childNodes[loop];
-                    var name = comment.getElementsByTagName("name")[0];
-
-                    appendComment(name.childNodes[0].nodeValue);
+                    var datum = comments[loop].getElementsByTagName("date")[0].childNodes[0].nodeValue;
+                    var text = comments[loop].getElementsByTagName("text")[0].childNodes[0].nodeValue;
+                    appendComment(datum, text, pid);
 
                 }
             }
-            function appendComment(name) {
-                var html = document.getElementById("comment").innerHTML;
-                html = html + '<tr>';
-                html = html + name;
-                html = html + '</tr>';
-                document.getElementById("comms").innerHTML = html;
+            function appendComment(dat, txt, p) {
+                var html = document.getElementById("comment" + p).innerHTML;
+                html = html + "<div id='time'>" + dat + "</div>";
+                html = html + "<div id='content'>"+ txt + "</div>";
+                document.getElementById("comment" + p).innerHTML = html;
             }
             function doComment(postid) {
-                var url = "Commentjs?comm=" + encodeURI(document.getElementById(postid).value) + "&postid=" +postid;
+                var url = "Commentjs?comm=" + encodeURI(document.getElementById(postid).value) + "&postid=" + postid;
                 var req = getXHR();
                 req.onreadystatechange = function ()
                 {
@@ -71,21 +70,21 @@
                 out.print("<div id='time'>" + s.getDate() + "</div>");
                 out.print("<div id='title'>" + s.getTitle() + "</div>");
                 out.print("<div id='content'>" + s.getContent() + "</div>");
-                out.print("<div id='comment'></div>");
+                out.print("<div id='comment" + s.getId() + "'>");
+                for (Comment c : s.getComments()) {
+                    out.print("<div id='time'>" + c.getDate() + "</div>");
+                    out.print("<div id='content'>" + c.getContent() + "</div>");
+                }     
+                out.print("</div>");
                 out.print("<p id='addtext'></p>");
                 out.print("<form id='commentForm' action='' method='GET'>");
-                out.print("<label for='comm'>Commentjs</label>");
+                out.print("<label for='comm'>Comment: </label>");
                 out.print("<textarea cols='40' rows='5' id='" + s.getId() + "' align='bottom'></textarea>");
                 out.print("<input type='hidden' name='pid' value=''>");
                 out.print("<input type='button' value='add comment' onclick=doComment(" + s.getId() + ")>");
                 out.print("</form>");
                 out.print("<a href='Comment?pid=" + s.getId() + "'>Comment</a>");
-                for (Comment c : s.getComments()) {
-                    out.print("<div id='comments'>");
-                    out.print("<div id='time'>" + c.getDate() + "</div>");
-                    out.print("<div id='content'>" + c.getContent() + "</div>");
-                    out.print("</div>");
-                }
+
                 out.print("<p>");
             }
         %>
