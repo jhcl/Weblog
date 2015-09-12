@@ -63,6 +63,7 @@
         </script>
     </head>
     <body>
+        <a href="/Weblog"> Home </a><br>
         <h1>WebLog form</h1>
         <%
             List<Posting> posts = (List<Posting>) request.getAttribute("postings");

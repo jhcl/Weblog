@@ -13,8 +13,13 @@
         <title>Weblog ESW</title>
     </head>
     <body>
+        <% session = request.getSession();
+        String s = "";
+        if (session.getAttribute("mode") != null && session.getAttribute("mode").equals("advanced")) s = "WeblogAdmAdv";
+        else s = "WeblogAdm";
+        %>
         <h1>Initial form</h1>
-        <a href="WeblogAdm">Weblog Administrator page</a><br>
+        <a href=<% out.print(s); %> >Weblog Administrator page</a><br>
         <a href="WebLog">Show all blogs</a><br>
     </body>
 </html>

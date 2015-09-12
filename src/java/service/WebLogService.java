@@ -16,6 +16,10 @@ public class WebLogService {
     public void addPosting(Posting p) {
         postingDao.create(p);
     }
+    
+    public void removePosting(Long postId) {
+        postingDao.delete(postId);
+    }
 
     public List<Posting> getPostings() {
         return postingDao.findAll();

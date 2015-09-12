@@ -11,6 +11,8 @@ public interface PostingDao {
 
     void create(Posting p);
 
+    void delete(Long postId);
+    
     List<Posting> findAll();
 
     Posting find(Long id);

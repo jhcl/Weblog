@@ -14,6 +14,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import model.Comment;
 import model.Posting;
 import service.WebLogService;
@@ -22,7 +23,7 @@ import service.WebLogService;
  *
  * @author calimero
  */
-@WebServlet(name = "ControllerServlet", urlPatterns = {"/WeblogAdm", "/WebLog", "/Comment", "/Commentjs"})
+@WebServlet(name = "ControllerServlet", urlPatterns = {"/WeblogAdmAdv", "/WeblogAdm", "/WebLog", "/Comment", "/Commentjs"})
 public class ControllerServlet extends HttpServlet {
 
     WebLogService ws = new WebLogService();
@@ -40,7 +41,6 @@ public class ControllerServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
@@ -70,11 +70,40 @@ public class ControllerServlet extends HttpServlet {
         String userPath = request.getServletPath();
         if (userPath.equals("/WebLog")) {
             RequestDispatcher view = request.getRequestDispatcher("view/WebLog.jsp");
-
             request.setAttribute("postings", ws.getPostings());
             view.forward(request, response);
         } else if (userPath.equals("/WeblogAdm")) {
-            RequestDispatcher view = request.getRequestDispatcher("view/WeblogAdm.jsp");
+            RequestDispatcher view = null;
+            HttpSession session = request.getSession();
+            request.setAttribute("postings", ws.getPostings());
+            if (session.getAttribute("mode") != null) {
+                if (session.getAttribute("mode").equals("basic")) {
+                    view = request.getRequestDispatcher("view/WeblogAdm.jsp");
+                } else {
+                    view = request.getRequestDispatcher("view/WeblogAdm.jsp");
+                }
+            } else {
+                session.setAttribute("mode", "basic");
+                view = request.getRequestDispatcher("view/WeblogAdm.jsp");
+            }
+
+            view.forward(request, response);
+        } else if (userPath.equals("/WeblogAdmAdv")) {
+            RequestDispatcher view = null;
+            HttpSession session = request.getSession();
+            session.setAttribute("mode", "advanced");
+            request.setAttribute("postings", ws.getPostings());
+            if (session.getAttribute("mode") != null) {
+                if (session.getAttribute("mode").equals("basic")) {
+                    view = request.getRequestDispatcher("view/WeblogAdm.jsp");
+                } else {
+                    view = request.getRequestDispatcher("view/WeblogAdmAdv.jsp");
+                }
+            } else {
+                session.setAttribute("mode", "basic");
+                view = request.getRequestDispatcher("view/WeblogAdm.jsp");
+            }
+
             view.forward(request, response);
         } else if (userPath.equals("/Comment")) {
             String pid = request.getParameter("pid");
@@ -127,15 +156,27 @@ public class ControllerServlet extends HttpServlet {
             throws ServletException, IOException {
         //    processRequest(request, response);
         String userPath = request.getServletPath();
-        System.out.println("Userpath :" + userPath);
         List<Posting> pos;
 
         if (userPath.equals("/WeblogAdm")) {
 
-            String title = request.getParameter("title");
-            String post = request.getParameter("post");
+            String action = request.getParameter("action");
 
-            ws.addPosting(new Posting(title, post));
+            if (action.equals("add")) {
+                String title = request.getParameter("title");
+                String post = request.getParameter("post");
+                ws.addPosting(new Posting(title, post));
+            } else if (action.endsWith("update")) {
+                String pid = request.getParameter("pid");
+                for (Posting p : ws.getPostings()) {
+                    if (p.getId() == Long.parseLong(pid)) {
+                        p.setContent(request.getParameter("post"));
+                    }
+                }
+            } else if (action.equals("delete")) {
+                ws.removePosting(Long.parseLong(request.getParameter("pid")));
+            }
+           
             pos = ws.getPostings();
 
             request.setAttribute("postings", pos);

@@ -39,6 +39,15 @@ public class PostingDaoImp implements PostingDao {
         p.setId(nextId);
         postings.put(nextId++, p);
     }
+    
+    /**
+     *
+     * @param postId
+     */
+    @Override
+    public void delete(Long postId) {
+        postings.remove(postId);
+    }
 
     ;
 
