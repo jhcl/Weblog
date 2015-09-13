@@ -58,6 +58,7 @@
                 }
                 req.open("GET", url, true);
                 req.send(null);
+                document.getElementById(postid).value = "";
 
             }
         </script>
@@ -84,9 +85,8 @@
                 out.print("<input type='hidden' name='pid' value=''>");
                 out.print("<input type='button' value='add comment' onclick=doComment(" + s.getId() + ")>");
                 out.print("</form>");
-                out.print("<a href='Comment?pid=" + s.getId() + "'>Comment</a>");
-
-                out.print("<p>");
+                out.print("<p />");
+                out.print("<hr />");
             }
         %>
     </body>

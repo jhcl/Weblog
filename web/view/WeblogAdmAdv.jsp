@@ -16,7 +16,7 @@
     </head>
     <body>
         <% session.setAttribute("mode", "advanced"); %>
-        <a href="view/index.jsp"> Home </a><br>
+        <a href="/Weblog"> Home </a><br>
                
         <h1>WeblogAdm advanced form</h1>
         <a href="WeblogAdm"> basic </a><br> 

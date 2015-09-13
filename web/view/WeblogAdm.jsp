@@ -14,7 +14,7 @@
     </head>
     <body>
         <% session.setAttribute("mode", "basic"); %>
-        <a href="view/index.jsp"> Home </a><br>
+        <a href="/Weblog"> Home </a><br>
         <h1>WeblogAdm basic form</h1>
         <a href="WeblogAdmAdv"> advanced </a><br>
         <form action="WeblogAdm" method="POST">

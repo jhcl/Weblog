@@ -25,4 +25,10 @@ public class WebLogService {
         return postingDao.findAll();
     }
 ;
+    public Posting getPosting(Long id) {
+        for (Posting p : postingDao.findAll()) {
+            if (p.getId().equals(id)) return p;
+        }
+        return null;
+    }
 }

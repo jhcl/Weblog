@@ -10,6 +10,7 @@ and open the template in the editor.
 body {
     background-color: #F0E68C;
 } 
+
 h1 {
     color: navy;
     font-size: 200%;
@@ -34,3 +35,7 @@ textarea {
 div[id^=comment] {
     margin-left: 100px;
 }
+
+hr {
+    width: 20%;
+    height: 2px;}
