@@ -13,7 +13,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import commandpattern.CommandFactory;
-import service.WebLogService;
 
 /**
  *
@@ -22,8 +21,8 @@ import service.WebLogService;
 @WebServlet(name = "ControllerServlet", urlPatterns = {"/WeblogAdmAdv", "/WeblogAdm", "/WebLog", "/Comment", "/Commentjs"})
 public class ControllerServlet extends HttpServlet {
 
-    private final WebLogService ws = new WebLogService();
-    private final CommandFactory commandFactory = CommandFactory.getCommandFactory(ws);
+//    private final WebLogService ws = new WebLogService();
+    private final CommandFactory commandFactory = CommandFactory.getCommandFactory();
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -50,7 +49,7 @@ public class ControllerServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        Command command = commandFactory.CreateCommand(ws, request, response);
+        Command command = commandFactory.CreateCommand(request, response);
         command.execute();
     }
 
@@ -65,7 +64,7 @@ public class ControllerServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        Command command = commandFactory.CreateCommand(ws, request, response);
+        Command command = commandFactory.CreateCommand(request, response);
         command.execute();
     }
 

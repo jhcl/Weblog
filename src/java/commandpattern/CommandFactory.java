@@ -19,7 +19,10 @@ public class CommandFactory {
     
     private final Map<String, Command> commands;
     private static CommandFactory instance;
-    private CommandFactory(WebLogService ws) {
+    private final WebLogService ws = new WebLogService();
+    
+    private CommandFactory() {
+        
         commands = new HashMap<>();
         commands.put("/WeblogAdmAdv", new WeblogAdmAdv(ws, null, null));
         commands.put("/WeblogAdm", new WeblogAdm(ws, null, null));
@@ -28,19 +31,17 @@ public class CommandFactory {
         commands.put("NotFound", new NotFound(ws, null, null));
     }
     
-    public static CommandFactory getCommandFactory(WebLogService ws) {
+    public static CommandFactory getCommandFactory() {
         if (instance != null) return instance;
-        else return new CommandFactory(ws);
+        else return new CommandFactory();
     }
     
     public void registerCommand(String userPath, Command command) {
         this.commands.put(userPath, command);
     }
     
-    public Command CreateCommand(WebLogService ws, HttpServletRequest request, HttpServletResponse response) {
-        System.out.println(request.getServletPath());
+    public Command CreateCommand(HttpServletRequest request, HttpServletResponse response) {
         Command doComm = this.commands.get(request.getServletPath());
-        System.out.println(request.getServletPath() + " userPath in createcommand");
         if (doComm == null) return this.commands.get("NotFound");
         
         doComm.setReq(request);
