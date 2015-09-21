@@ -36,11 +36,11 @@ public class WeblogAdm extends Command {
             HttpSession session = request.getSession();
             request.setAttribute("postings", service.getPostings());
             if (session.getAttribute("mode") != null) {
-                if (session.getAttribute("mode").equals("basic")) {
+//                if (session.getAttribute("mode").equals("basic")) {
                     view = request.getRequestDispatcher("view/WeblogAdm.jsp");
-                } else {
-                    view = request.getRequestDispatcher("view/WeblogAdm.jsp");
-                }
+//                } else {
+//                    view = request.getRequestDispatcher("view/WeblogAdm.jsp");
+//                }
             } else {
                 session.setAttribute("mode", "basic");
                 view = request.getRequestDispatcher("view/WeblogAdm.jsp");
